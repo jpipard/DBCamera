@@ -8,7 +8,7 @@
 
 "button.use" = "Use photo";
 "button.retake" = "Retake";
-"button.next" = "Next";
+"button.next" = "Suivant";
 
 "general.error.title" = "Attention";
 "general.button.cancel" = "Cancel";
@@ -23,8 +23,7 @@
 
 "cropmode.title" = "Aspect Ratio";
 "cropmode.square" = "Square";
+"ftux.import.title" = "Importez depuis votre Album Photo";
+"ftux.import.text" = "Choisissez la photo d'un lieu qui vous a marqué";
 
-"ftux.import.title" = "Import from your camera roll";
-"ftux.import.text" = "Select a picture to import to your world map";
-
-"imageEdit.title" = "Edit picture";
+"imageEdit.title" = "Edition";

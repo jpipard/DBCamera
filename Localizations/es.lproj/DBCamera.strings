@@ -8,6 +8,7 @@
 
 "button.use" = "Usar";
 "button.retake" = "Volver a tomar";
+"button.next" = "Siguiente";
 
 "general.error.title" = "¡Atención!";
 "general.button.cancel" = "Cancelar";
@@ -22,3 +23,9 @@
 
 "cameraimage.nopolicy" = "Please enable the permissions in order to use your Camera. Check your permissions in Settings > Privacy > Camera";
 "cameraimage.noconnection" = "Could not connect to camera. Please check your permissions in Settings > Privacy > Camera";
+
+
+"ftux.import.title" = "Importar de su álbum de fotos";
+"ftux.import.text" = "Elija una imagen de un lugar que le ha impresionado";
+
+"imageEdit.title" = "Edición";

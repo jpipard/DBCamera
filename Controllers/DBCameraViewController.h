@@ -19,6 +19,10 @@
  *  DBCameraViewController
  */
 @interface DBCameraViewController : UIViewController <DBCameraSegueSettings, DBCameraViewControllerSettings>
+
+@property (nonatomic, strong) UIView *ftuxOverlay;
+@property (nonatomic, strong) UIView *ftuxOverlay2;
+
 /**
  *  An id object compliant with the DBCameraViewControllerDelegate
  */

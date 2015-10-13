@@ -41,6 +41,7 @@ static const CGSize kFilterCellSize = { 75, 90 };
 }
 
 @property (nonatomic, strong) UIView *navigationBar, *bottomBar;
+@property (nonatomic, strong) UILabel *headerText;
 @property (nonatomic, strong) UIButton *useButton, *retakeButton, *cropButton;
 @property (nonatomic, strong) DBCameraLoadingView *loadingView;
 @end
@@ -253,6 +254,7 @@ static const CGSize kFilterCellSize = { 75, 90 };
         _navigationBar = [[UIView alloc] initWithFrame:(CGRect){ 0, 0, [[UIScreen mainScreen] bounds].size.width, 64 }];
         [_navigationBar setBackgroundColor:[UIColor blackColor]];
         [_navigationBar setUserInteractionEnabled:YES];
+        [_navigationBar addSubview:self.headerText];
         [_navigationBar addSubview:self.useButton];
         [_navigationBar addSubview:self.retakeButton];
         if ( !_forceQuadCrop )
@@ -286,19 +288,37 @@ static const CGSize kFilterCellSize = { 75, 90 };
 {
     if ( !_useButton ) {
         _useButton = [self baseButton];
-        [_useButton setBackgroundImage:[UIImage imageNamed:@"check"] forState:UIControlStateNormal];
-        _useButton.tintColor = [UIColor colorWithRed:108.0/255.0 green:197.0/255.0 blue:168.0/255.0 alpha:1.0];
-        [_useButton sizeToFit];
+        _useButton.tintColor = [UIColor colorWithRed:244.0/255.0 green:124.0/255.0 blue:110.0/255.0 alpha:1.0];
         [_useButton setFrame:(CGRect){
-            CGRectGetWidth(self.view.frame) - (CGRectGetWidth(_useButton.frame) + buttonMargin),
-            30,
-            20,
-            20
+            CGRectGetWidth(self.view.frame) - (CGRectGetWidth(_useButton.frame) + 40),
+            23,
+            25,
+            18
         }];
+        [_useButton setTitle:@"Ok" forState:UIControlStateNormal];
+        [_useButton sizeToFit];
         [_useButton addTarget:self action:@selector(saveImage) forControlEvents:UIControlEventTouchUpInside];
     }
     
     return _useButton;
+}
+
+- (UILabel *) headerText
+{
+    if ( !_headerText ) {
+        _headerText = [[UILabel alloc] init];
+        [_headerText setFrame:(CGRect){
+            (CGRectGetWidth(self.view.frame) / 2) - 75,
+            25,
+            150,
+            30
+        }];
+        [_headerText setText:DBCameraLocalizedStrings(@"imageEdit.title")];
+        [_headerText setTextAlignment:NSTextAlignmentCenter];
+        _headerText.textColor = [UIColor whiteColor];
+    }
+    
+    return _headerText;
 }
 
 - (UIButton *) retakeButton
@@ -331,11 +351,9 @@ static const CGSize kFilterCellSize = { 75, 90 };
 
 - (UIButton *) baseButton
 {
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button setBackgroundColor:[UIColor clearColor]];
-    [button setTitleColor:self.tintColor forState:UIControlStateNormal];
-    button.titleLabel.font = [UIFont systemFontOfSize:12];
-    
+    button.titleLabel.font = [UIFont systemFontOfSize:20];
     return button;
 }
 

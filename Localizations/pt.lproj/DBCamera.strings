@@ -23,3 +23,9 @@
 
 "cameraimage.nopolicy" = "Please enable the permissions in order to use your Camera. Check your permissions in Settings > Privacy > Camera";
 "cameraimage.noconnection" = "Could not connect to camera. Please check your permissions in Settings > Privacy > Camera";
+
+
+"ftux.import.title" = "Importar do seu rolo da câmera";
+"ftux.import.text" = "Selecione uma imagem para importar para o seu mapa do mundo";
+
+"imageEdit.title" = "Editar imagem";

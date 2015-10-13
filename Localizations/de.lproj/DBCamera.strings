@@ -22,3 +22,9 @@
 
 "cropmode.title" = "Seitenverhältnis";
 "cropmode.square" = "Qaudrat";
+
+
+"ftux.import.title" = "Import from your camera roll";
+"ftux.import.text" = "Select a picture to import to your world map";
+
+"imageEdit.title" = "Edit picture";

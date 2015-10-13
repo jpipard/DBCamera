@@ -55,11 +55,11 @@
     return YES;
 }
 
-- (NSUInteger)supportedInterfaceOrientations {
+- (UIInterfaceOrientationMask) supportedInterfaceOrientations {
     return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown;
 }
 
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+- (UIInterfaceOrientation) preferredInterfaceOrientationForPresentation {
     return UIInterfaceOrientationPortrait;
 }
 

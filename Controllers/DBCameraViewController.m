@@ -123,6 +123,7 @@ NSLocalizedStringFromTableInBundle(key, @"DBCamera", [NSBundle bundleForClass:se
         [weakSelf rotationChanged:orientation];
     }];
     [[DBMotionManager sharedManager] startMotionHandler];
+    [self showFtux];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -138,14 +139,55 @@ NSLocalizedStringFromTableInBundle(key, @"DBCamera", [NSBundle bundleForClass:se
     [self.cameraManager performSelector:@selector(stopRunning) withObject:nil afterDelay:0.0];
 }
 
+- (void)showFtux {
+    // ftux
+    [self.ftuxOverlay removeFromSuperview];
+    [self.ftuxOverlay2 removeFromSuperview];
+    if([[NSUserDefaults standardUserDefaults] integerForKey:@"showFtuxStep"] == 3) {
+        self.ftuxOverlay = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 70)];
+        UIView *overlay1 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height - 70)];
+        [overlay1 setAlpha:0.75];
+        [overlay1 setBackgroundColor:[UIColor blackColor]];
+        [self.view addSubview:self.ftuxOverlay];
+        [self.ftuxOverlay addSubview:overlay1];
+
+        self.ftuxOverlay2 = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-70, self.view.frame.size.width-70, 70)];
+        [self.ftuxOverlay2 setAlpha:0.75];
+        [self.ftuxOverlay2 setBackgroundColor:[UIColor blackColor]];
+        [self.view addSubview:self.ftuxOverlay2];
+
+        UILabel *helpTitle = [[UILabel alloc] init];
+        [helpTitle setFrame:CGRectMake(self.view.frame.size.width - 300, self.view.frame.size.height - 190, 300, 50)];
+        [helpTitle setText:DBCameraLocalizedStrings(@"ftux.import.title")];
+        [helpTitle setNumberOfLines:2];
+        [helpTitle setTextColor:[UIColor whiteColor]];
+        [helpTitle setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:18]];
+        [self.ftuxOverlay addSubview:helpTitle];
+
+        UILabel *helpText = [[UILabel alloc] init];
+        [helpText setFrame:CGRectMake(self.view.frame.size.width - 300, self.view.frame.size.height - 150, 300, 50)];
+        [helpText setText:DBCameraLocalizedStrings(@"ftux.import.text")];
+        [helpText setTextColor:[UIColor whiteColor]];
+        [helpText setNumberOfLines:2];
+        [helpText setFont:[UIFont fontWithName:@"HelveticaNeue" size:15]];
+        [self.ftuxOverlay addSubview:helpText];
+
+        UIImageView *arrowImage = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 47,
+                                                                                self.view.frame.size.height - 100,
+                                                                                22, 20)];
+        [arrowImage setImage:[UIImage imageNamed:@"chevron_down.png"]];
+        [self.ftuxOverlay addSubview:arrowImage];
+    }
+}
+
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     _cameraManager = nil;
 }
 
-- (NSUInteger)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskPortraitUpsideDown;
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
@@ -156,10 +198,21 @@ NSLocalizedStringFromTableInBundle(key, @"DBCamera", [NSBundle bundleForClass:se
 {
     if ( !self.cameraView.photoLibraryButton.isHidden && [self.parentViewController.class isSubclassOfClass:NSClassFromString(@"DBCameraContainerViewController")] ) {
         if ( [ALAssetsLibrary authorizationStatus] !=  ALAuthorizationStatusDenied ) {
+            if ([[NSUserDefaults standardUserDefaults] integerForKey:@"authorizationStatusCamera"] != 100 ||
+                [[NSUserDefaults standardUserDefaults] integerForKey:@"authorizationStatusCamera"] != 10 ||
+                [[NSUserDefaults standardUserDefaults] integerForKey:@"authorizationStatusCamera"] != 20) {
+                [[NSUserDefaults standardUserDefaults] setInteger:20 forKey:@"authorizationStatusCamera"];
+            }
             __weak DBCameraView *weakCamera = self.cameraView;
             [[DBLibraryManager sharedInstance] loadLastItemWithBlock:^(BOOL success, UIImage *image) {
                 [weakCamera.photoLibraryButton setBackgroundImage:image forState:UIControlStateNormal];
             }];
+        } else {
+            if ([[NSUserDefaults standardUserDefaults] integerForKey:@"authorizationStatusCamera"] != 100 ||
+                [[NSUserDefaults standardUserDefaults] integerForKey:@"authorizationStatusCamera"] != 10 ||
+                [[NSUserDefaults standardUserDefaults] integerForKey:@"authorizationStatusCamera"] != 20) {
+                [[NSUserDefaults standardUserDefaults] setInteger:10 forKey:@"authorizationStatusCamera"];
+            }
         }
     } else
         [self.cameraView.photoLibraryButton setHidden:YES];
