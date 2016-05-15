@@ -6,9 +6,10 @@
   Copyright (c) 2014 PSSD - Daniele Bogo. All rights reserved.
 */
 
-"button.use" = "Use photo";
+"button.use" = "Select";
 "button.retake" = "Retake";
 "button.next" = "Next";
+"ignore" = "Pass";
 
 "general.error.title" = "Attention";
 "general.button.cancel" = "Cancel";
@@ -19,7 +20,7 @@
 "pickerimage.nopolicy" = "Please enable the permissions in order to use your Photo Library. Check your permissions in Settings > Privacy > Photos";
 "pickerimage.nophoto" = "There are no images in your Library";
 
-"pagecontrol.text" = "%i of %i";
+"pagecontrol.text" = "%i of %i (swipe horizontally to switch album)";
 
 "cropmode.title" = "Aspect Ratio";
 "cropmode.square" = "Square";
@@ -28,3 +29,5 @@
 "ftux.import.text" = "Select a picture to import to your world map";
 
 "imageEdit.title" = "Edit picture";
+
+"picture" = "Picture";

@@ -31,7 +31,7 @@ NSLocalizedStringFromTableInBundle(key, @"DBCamera", [NSBundle bundleForClass:se
 
 @interface DBCameraLibraryViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, DBCameraCollectionControllerDelegate> {
     NSMutableArray *_items;
-    UILabel *_titleLabel, *_pageLabel;
+    UILabel *_pageLabel;
     NSMutableDictionary *_containersMapping;
     UIPageViewController *_pageViewController;
     NSUInteger _vcIndex;
@@ -94,12 +94,17 @@ NSLocalizedStringFromTableInBundle(key, @"DBCamera", [NSBundle bundleForClass:se
     [self.view setGestureRecognizers:_pageViewController.gestureRecognizers];
 	
 	[self loadLibraryGroups];
-}
+    
+    self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    [self.navigationController.navigationBar
+     setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];}
 
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    [self.navigationController.navigationBar setTranslucent:NO];
+
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_7_0
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 #endif
@@ -211,7 +216,8 @@ NSLocalizedStringFromTableInBundle(key, @"DBCamera", [NSBundle bundleForClass:se
 
 - (void) setNavigationTitleAtIndex:(NSUInteger)index
 {
-    [_titleLabel setText:[_items[index][@"groupTitle"] uppercaseString]];
+    self.title = DBCameraLocalizedStrings(@"picture");
+    self.navigationController.tabBarItem.title = nil;
     [_pageLabel setText:[NSString stringWithFormat:DBCameraLocalizedStrings(@"pagecontrol.text"), index + 1, _items.count ]];
 }
 
@@ -261,29 +267,6 @@ NSLocalizedStringFromTableInBundle(key, @"DBCamera", [NSBundle bundleForClass:se
     return _loading;
 }
 
-- (UIView *) topContainerBar
-{
-    if ( !_topContainerBar ) {
-        _topContainerBar = [[UIView alloc] initWithFrame:(CGRect){ 0, 0, CGRectGetWidth(self.view.bounds), 65 }];
-        [_topContainerBar setBackgroundColor:RGBColor(0x000000, 1)];
-        
-        UIButton *closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [closeButton setBackgroundColor:[UIColor clearColor]];
-        [closeButton setImage:[[UIImage imageInBundleNamed:@"close"] tintImageWithColor:self.tintColor] forState:UIControlStateNormal];
-        [closeButton setFrame:(CGRect){ 10, 10, 45, 45 }];
-        [closeButton addTarget:self action:@selector(close) forControlEvents:UIControlEventTouchUpInside];
-        [_topContainerBar addSubview:closeButton];
-        
-        _titleLabel = [[UILabel alloc] initWithFrame:(CGRect){ CGRectGetMaxX(closeButton.frame), 0, CGRectGetWidth(self.view.bounds) - (CGRectGetWidth(closeButton.bounds) * 2), CGRectGetHeight(_topContainerBar.bounds) }];
-        [_titleLabel setBackgroundColor:[UIColor clearColor]];
-        [_titleLabel setTextColor:self.tintColor];
-        [_titleLabel setFont:[UIFont systemFontOfSize:12]];
-        [_titleLabel setTextAlignment:NSTextAlignmentCenter];
-        [_topContainerBar addSubview:_titleLabel];
-    }
-    return _topContainerBar;
-}
-
 - (UIView *) bottomContainerBar
 {
     if ( !_bottomContainerBar ) {
@@ -293,7 +276,7 @@ NSLocalizedStringFromTableInBundle(key, @"DBCamera", [NSBundle bundleForClass:se
         _pageLabel = [[UILabel alloc] initWithFrame:_bottomContainerBar.bounds ];
         [_pageLabel setBackgroundColor:[UIColor clearColor]];
         [_pageLabel setTextColor:self.tintColor];
-        [_pageLabel setFont:[UIFont systemFontOfSize:12]];
+        [_pageLabel setFont:[UIFont fontWithName:@"OpenSans" size:13]];
         [_pageLabel setTextAlignment:NSTextAlignmentCenter];
         [_bottomContainerBar addSubview:_pageLabel];
     }

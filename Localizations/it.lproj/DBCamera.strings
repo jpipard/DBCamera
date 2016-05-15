@@ -8,6 +8,7 @@
 
 "button.use" = "Usa la foto";
 "button.retake" = "Rifai";
+"ignore" = "Pass";
 
 "general.error.title" = "Attenzione";
 "general.button.cancel" = "Annulla";

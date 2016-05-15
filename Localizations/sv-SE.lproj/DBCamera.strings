@@ -8,6 +8,7 @@
 
 "button.use" = "Använd foto";
 "button.retake" = "Ta om";
+"ignore" = "Pass";
 
 "general.error.title" = "Obs";
 "general.button.cancel" = "Avbryt";

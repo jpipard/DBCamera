@@ -40,9 +40,7 @@ static const CGSize kFilterCellSize = { 75, 90 };
     CGRect _pFrame, _lFrame;
 }
 
-@property (nonatomic, strong) UIView *navigationBar, *bottomBar;
-@property (nonatomic, strong) UILabel *headerText;
-@property (nonatomic, strong) UIButton *useButton, *retakeButton, *cropButton;
+@property (nonatomic, strong) UIButton *cropButton;
 @property (nonatomic, strong) DBCameraLoadingView *loadingView;
 @end
 
@@ -117,18 +115,24 @@ static const CGSize kFilterCellSize = { 75, 90 };
     
     [self.view setUserInteractionEnabled:YES];
     [self.view setBackgroundColor:[UIColor blackColor]];
-    
+
     CGFloat cropX = ( CGRectGetWidth( self.frameView.frame) - 320 ) * .5;
     _pFrame = (CGRect){ cropX, ( CGRectGetHeight( self.frameView.frame) - 360 ) * .5, 320, 320 };
     _lFrame = (CGRect){ cropX, ( CGRectGetHeight( self.frameView.frame) - 240) * .5, 320, 240 };
-    
+
     [self setCropRect:self.previewImage.size.width > self.previewImage.size.height ? _lFrame : _pFrame];
     
     [self.view addSubview:self.filtersView];
-    [self.view addSubview:self.navigationBar];
-    [self.view addSubview:self.bottomBar];
     [self.view setClipsToBounds:YES];
-    
+
+    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:DBCameraLocalizedStrings(@"button.use")
+                                                                      style:UIBarButtonItemStylePlain
+                                                                     target:self action:@selector(saveImage)];
+    anotherButton.tintColor = [UIColor colorWithRed:244.0/255.0 green:124.0/255.0 blue:110.0/255.0 alpha:1.0];
+    self.navigationItem.rightBarButtonItem = anotherButton;
+
+    self.title = DBCameraLocalizedStrings(@"imageEdit.title");
+
     if( self.cameraSegueConfigureBlock )
         self.cameraSegueConfigureBlock(self);
 }
@@ -136,7 +140,6 @@ static const CGSize kFilterCellSize = { 75, 90 };
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
     if ( _forceQuadCrop ) {
         [self setCropMode:YES];
         [self setCropRect:_pFrame];
@@ -145,6 +148,8 @@ static const CGSize kFilterCellSize = { 75, 90 };
     
     if ( _cropMode )
         [_cropButton setSelected:YES];
+
+    [self.navigationController.navigationBar setTranslucent:NO];
 }
 
 - (void)didReceiveMemoryWarning
@@ -169,10 +174,11 @@ static const CGSize kFilterCellSize = { 75, 90 };
 
 - (void) createInterface
 {
-    CGFloat viewHeight = CGRectGetHeight([[UIScreen mainScreen] bounds]) - 64 - 40;
-    _cropView = [[DBCameraCropView alloc] initWithFrame:(CGRect){ 0, 64, [[UIScreen mainScreen] bounds].size.width, viewHeight }];
+    CGFloat viewHeight = CGRectGetHeight([[UIScreen mainScreen] bounds]);
+    _cropView = [[DBCameraCropView alloc] initWithFrame:(CGRect){ 0, 0, [[UIScreen mainScreen] bounds].size.width, viewHeight }];
     [_cropView setHidden:YES];
-    
+    _cropView.frame = CGRectMake(0, -74, _cropView.frame.size.width, _cropView.frame.size.height + 74);
+
     [self setFrameView:_cropView];
 }
 
@@ -221,7 +227,6 @@ static const CGSize kFilterCellSize = { 75, 90 };
     
     // Only hide filters if quad crop is not forced, otherwise filters are not accessible
     if (!_forceQuadCrop) {
-        [self.bottomBar setHidden:!_cropMode];
         [self.filtersView setHidden:_cropMode];
     }
 }
@@ -229,7 +234,7 @@ static const CGSize kFilterCellSize = { 75, 90 };
 - (DBCameraFiltersView *) filtersView
 {
     if ( !_filtersView ) {
-        _filtersView = [[DBCameraFiltersView alloc] initWithFrame:(CGRect){ 0, CGRectGetHeight(self.view.frame)-kFilterCellSize.height, CGRectGetWidth(self.view.frame), kFilterCellSize.height} collectionViewLayout:[DBCameraFiltersView filterLayout]];
+        _filtersView = [[DBCameraFiltersView alloc] initWithFrame:(CGRect){ 0, CGRectGetHeight(self.view.frame) - kFilterCellSize.height - 64 - 55, CGRectGetWidth(self.view.frame), kFilterCellSize.height} collectionViewLayout:[DBCameraFiltersView filterLayout]];
         [_filtersView setDelegate:self];
         [_filtersView setDataSource:self];
         [_filtersView registerClass:[DBCameraFilterCell class] forCellWithReuseIdentifier:kFilterCellIdentifier];
@@ -248,93 +253,6 @@ static const CGSize kFilterCellSize = { 75, 90 };
     return _loadingView;
 }
 
-- (UIView *) navigationBar
-{
-    if ( !_navigationBar ) {
-        _navigationBar = [[UIView alloc] initWithFrame:(CGRect){ 0, 0, [[UIScreen mainScreen] bounds].size.width, 64 }];
-        [_navigationBar setBackgroundColor:[UIColor blackColor]];
-        [_navigationBar setUserInteractionEnabled:YES];
-        [_navigationBar addSubview:self.headerText];
-        [_navigationBar addSubview:self.useButton];
-        [_navigationBar addSubview:self.retakeButton];
-        if ( !_forceQuadCrop )
-            [_navigationBar addSubview:self.cropButton];
-    }
-    
-    return _navigationBar;
-}
-
-- (UIView *) bottomBar
-{
-    if ( !_bottomBar ) {
-        _bottomBar = [[UIView alloc] initWithFrame:(CGRect){ 0, CGRectGetHeight([[UIScreen mainScreen] bounds]) - 40, [[UIScreen mainScreen] bounds].size.width, 40 }];
-        [_bottomBar setBackgroundColor:[UIColor blackColor]];
-        [_bottomBar setHidden:YES];
-        
-        if ( !_forceQuadCrop ) {
-            UIButton *actionsheetButton = [UIButton buttonWithType:UIButtonTypeCustom];
-            [actionsheetButton setFrame:_bottomBar.bounds];
-            [actionsheetButton setBackgroundColor:[UIColor clearColor]];
-            [actionsheetButton setTitle:DBCameraLocalizedStrings(@"cropmode.title") forState:UIControlStateNormal];
-            [actionsheetButton addTarget:self action:@selector(openActionsheet:) forControlEvents:UIControlEventTouchUpInside];
-            [_bottomBar addSubview:actionsheetButton];
-        }
-    }
-    
-    return _bottomBar;
-}
-
-- (UIButton *) useButton
-{
-    if ( !_useButton ) {
-        _useButton = [self baseButton];
-        _useButton.tintColor = [UIColor colorWithRed:244.0/255.0 green:124.0/255.0 blue:110.0/255.0 alpha:1.0];
-        [_useButton setFrame:(CGRect){
-            CGRectGetWidth(self.view.frame) - (CGRectGetWidth(_useButton.frame) + 40),
-            23,
-            25,
-            18
-        }];
-        [_useButton setTitle:@"Ok" forState:UIControlStateNormal];
-        [_useButton sizeToFit];
-        [_useButton addTarget:self action:@selector(saveImage) forControlEvents:UIControlEventTouchUpInside];
-    }
-    
-    return _useButton;
-}
-
-- (UILabel *) headerText
-{
-    if ( !_headerText ) {
-        _headerText = [[UILabel alloc] init];
-        [_headerText setFrame:(CGRect){
-            (CGRectGetWidth(self.view.frame) / 2) - 75,
-            25,
-            150,
-            30
-        }];
-        [_headerText setText:DBCameraLocalizedStrings(@"imageEdit.title")];
-        [_headerText setTextAlignment:NSTextAlignmentCenter];
-        _headerText.textColor = [UIColor whiteColor];
-    }
-    
-    return _headerText;
-}
-
-- (UIButton *) retakeButton
-{
-    if ( !_retakeButton ) {
-        _retakeButton = [self baseButton];
-        [_retakeButton setBackgroundImage:[UIImage imageNamed:@"back"] forState:UIControlStateNormal];
-        _retakeButton.tintColor = [UIColor colorWithRed:108.0/255.0 green:197.0/255.0 blue:168.0/255.0 alpha:1.0];
-        [_retakeButton sizeToFit];
-        [_retakeButton setFrame:(CGRect){ buttonMargin, 30, 20, 20 }];
-        [_retakeButton addTarget:self action:@selector(retakeImage) forControlEvents:UIControlEventTouchUpInside];
-    }
-    
-    return _retakeButton;
-}
-
 - (UIButton *) cropButton
 {
     if ( !_cropButton) {
@@ -347,14 +265,6 @@ static const CGSize kFilterCellSize = { 75, 90 };
     }
     
     return _cropButton;
-}
-
-- (UIButton *) baseButton
-{
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button setBackgroundColor:[UIColor clearColor]];
-    button.titleLabel.font = [UIFont systemFontOfSize:20];
-    return button;
 }
 
 - (BOOL) prefersStatusBarHidden
@@ -407,7 +317,7 @@ static const CGSize kFilterCellSize = { 75, 90 };
     if ( buttonIndex != actionSheet.cancelButtonIndex ) {
         NSUInteger height = [_cropArray[buttonIndex] integerValue];
         CGFloat cropX = ( CGRectGetWidth( self.frameView.frame) - 320 ) * .5;
-        CGRect cropRect = (CGRect){ cropX, ( CGRectGetHeight( self.frameView.frame) - (CGRectGetHeight(self.bottomBar.frame) + height) ) * .5, 320, height };
+        CGRect cropRect = (CGRect){ cropX, ( CGRectGetHeight( self.frameView.frame) - height ) * .5, 320, height };
         
         [self setCropRect:cropRect];
         [self reset:YES];

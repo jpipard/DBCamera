@@ -111,6 +111,7 @@ static const NSTimeInterval kAnimationIntervalTransform = 0.2;
             });
         });
     }
+    [self.navigationController.navigationBar setTranslucent:NO];
 }
 
 - (void)didReceiveMemoryWarning
@@ -145,7 +146,11 @@ static const NSTimeInterval kAnimationIntervalTransform = 0.2;
     self.scale = 1;
     self.minimumScale = 1;
     
-    self.initialImageFrame = (CGRect){ CGRectGetMidX(self.cropRect) - w/2, CGRectGetMidY(self.cropRect) - h/2,w,h };
+    self.initialImageFrame = (CGRect){
+            CGRectGetMidX(self.cropRect) - w/2,
+            CGRectGetMidY(self.cropRect) - h/2,
+            w,h
+    };
     self.validTransform = CGAffineTransformMakeScale(self.scale, self.scale);
     
     void (^doReset)(void) = ^{

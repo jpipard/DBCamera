@@ -9,6 +9,7 @@
 
 "button.use" = "Usar foto";
 "button.retake" = "Repetir";
+"ignore" = "Pass";
 
 "general.error.title" = "Atenção";
 "general.button.cancel" = "Cancelar";
@@ -29,3 +30,5 @@
 "ftux.import.text" = "Selecione uma imagem para importar para o seu mapa do mundo";
 
 "imageEdit.title" = "Editar imagem";
+
+"picture" = "Imagem";

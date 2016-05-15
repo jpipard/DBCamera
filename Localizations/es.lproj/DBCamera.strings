@@ -9,6 +9,7 @@
 "button.use" = "Usar";
 "button.retake" = "Volver a tomar";
 "button.next" = "Siguiente";
+"ignore" = "Pass";
 
 "general.error.title" = "¡Atención!";
 "general.button.cancel" = "Cancelar";
@@ -29,3 +30,5 @@
 "ftux.import.text" = "Elija una imagen de un lugar que le ha impresionado";
 
 "imageEdit.title" = "Edición";
+
+"picture" = "Foto";

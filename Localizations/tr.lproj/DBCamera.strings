@@ -8,6 +8,7 @@
 
 "button.use" = "Kullan";
 "button.retake" = "Tekrar Çek";
+"ignore" = "Pass";
 
 "general.error.title" = "Uyarı";
 "general.button.cancel" = "İptal";
