@@ -1,0 +1,32 @@
+/* 
+  DBCamera.strings
+  DBCamera
+
+  Created by iBo on 11/02/14.
+  Copyright (c) 2014 PSSD - Daniele Bogo. All rights reserved.
+*/
+
+"button.use" = "Valider";
+"button.retake" = "Retake";
+"button.next" = "Suivant";
+"ignore" = "Passer";
+
+"general.error.title" = "Attention";
+"general.button.cancel" = "Annuler";
+
+"cameraimage.nopolicy" = "Please enable the permissions in order to use your Camera. Check your permissions in Settings > Privacy > Camera";
+"cameraimage.noconnection" = "Could not connect to camera. Please check your permissions in Settings > Privacy > Camera";
+
+"pickerimage.nopolicy" = "Please enable the permissions in order to use your Photo Library. Check your permissions in Settings > Privacy > Photos";
+"pickerimage.nophoto" = "There are no images in your Library";
+
+"pagecontrol.text" = "%i sur %i (Glissez horizontalement pour changer d'album)";
+
+"cropmode.title" = "Aspect Ratio";
+"cropmode.square" = "Square";
+"ftux.import.title" = "Importez depuis votre Album Photo";
+"ftux.import.text" = "Choisissez la photo d'un lieu qui vous a marqué";
+
+"imageEdit.title" = "Edition";
+
+"picture" = "Photo";
